@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-//create a function to start a new deployment to the production environment using the main git branch
 function startVercelDeploy() {
     let url = 'https://api.vercel.com/v13/deployments?forceNew=1&skipAutoDetectionConfirmation1';
     let xhr = new XMLHttpRequest();
