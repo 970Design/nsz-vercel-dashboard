@@ -1,6 +1,6 @@
 <?php
 /**
- * NSZ Events
+ * Vercel Dashboard
  *
  * Plugin Name: 970 Design Vercel Dashboard
  * Plugin URI:  https://970design.com/
