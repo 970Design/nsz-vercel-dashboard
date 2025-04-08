@@ -56,7 +56,7 @@ class Vercel_Dashboard {
                         echo "<strong>Elapsed Time:</strong> " . $elapsedTime . "<br />";
                     }
 
-                    echo "<strong>State:</strong> <span class='nsz-vercel-state nsz-vercel-state-".strtolower($deployment['state'])."'>" . $deployment['state'] . "</span><br />";
+                    echo "<strong>Status:</strong> <span class='nsz-vercel-state nsz-vercel-state-".strtolower($deployment['state'])."'>" . $deployment['state'] . "</span><br />";
 
                     if ($deployment['state'] === 'BUILDING' || $deployment['state'] === 'QUEUED') {
                         echo '<br /><button class="cancel-vercel-deploy button button-primary" data-id="'.$deployment['uid'].'">Cancel Deployment</button><hr />';
