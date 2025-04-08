@@ -47,6 +47,11 @@ class Vercel_Dashboard {
     }
 
     public function nsz_vercel_dashboard_widget() {
+        $settings_url = esc_url(add_query_arg(
+            'page',
+            'nsz_vercel_dashboard_settings',
+            get_admin_url() . 'options-general.php'
+        ));
         if ($this->vercelApiToken && $this->projectId) {
             try {
                 $deployments = $this->getDeployments($this->vercelApiToken, $this->projectId);
@@ -54,7 +59,7 @@ class Vercel_Dashboard {
                 if ($this->gitOrg && $this->gitRepo && $this->gitBranch) {
                     echo '<div class="nsz-design-vercel-header"><button class="start-vercel-deploy button button-primary">Start a New Deployment</button></div>';
                 } else {
-                    echo "<p>Please set your Git Repo, Org, and Branch in the <a href='".esc_url(add_query_arg('page', 'nsz_vercel_dashboard_settings', get_admin_url() . 'options-general.php'))."'>plugin settings</a>.</p>";
+                    echo "<p>Please set your Git Repo, Org, and Branch in the <a href='".$settings_url."'>plugin settings</a>.</p>";
                 }
 
                 foreach ($deployments as $deployment) {
@@ -89,12 +94,7 @@ class Vercel_Dashboard {
                 echo 'Error: ' . $e->getMessage();
             }
         } else {
-            $url = esc_url(add_query_arg(
-                'page',
-                'nsz_vercel_dashboard_settings',
-                get_admin_url() . 'options-general.php'
-            ));
-            echo "<p>Please set your Vercel API token and Project ID in the <a href='".$url."'>plugin settings</a>.</p>";
+            echo "<p>Please set your Vercel API token and Project ID in the <a href='".$settings_url."'>plugin settings</a>.</p>";
         }
     }
 
