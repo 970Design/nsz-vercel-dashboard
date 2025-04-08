@@ -18,8 +18,29 @@ class Vercel_Dashboard {
     }
 
     public function init(){
-        add_action( "wp_dashboard_setup", array( $this, "nsz_vercel_dashboard" ) );
+        add_action('wp_dashboard_setup', array( $this, 'nsz_vercel_dashboard' ) );
+        add_action('admin_enqueue_scripts', array( $this, 'nsz_vercel_dashboard_admin_style' ));
     }
+
+    public function nsz_vercel_dashboard_admin_style() {
+        $url     = plugin_dir_url( __FILE__ );
+        $version = '1.0';
+
+        wp_enqueue_style( 'nsz_vercel_dashboard_admin_css', "{$url}assets/nsz-vercel-dashboard.css", false, $version);
+
+        wp_enqueue_script( 'nsz_vercel_dashboard_admin_js', "{$url}assets/nsz-vercel-dashboard.js", false, $version);
+
+        $params = array(
+            'api_token' => $this->vercelApiToken,
+            'project_id' => $this->projectId,
+            'git_repo' => $this->gitRepo,
+            'git_org' => $this->gitOrg,
+            'git_branch' => $this->gitBranch,
+        );
+
+        wp_localize_script( 'nsz_vercel_dashboard_admin_js', 'nsz_vercel_dashboard_admin_js', $params );
+    }
+
 
     public function nsz_vercel_dashboard() {
         wp_add_dashboard_widget( "nsz_vercel_dashboard_widget", "Vercel Dashboard", array( $this, "nsz_vercel_dashboard_widget" ) );
@@ -56,7 +77,7 @@ class Vercel_Dashboard {
                         echo "<strong>Elapsed Time:</strong> " . $elapsedTime . "<br />";
                     }
 
-                    echo "<strong>Status:</strong> <span class='nsz-vercel-state nsz-vercel-state-".strtolower($deployment['state'])."'>" . $deployment['state'] . "</span><br />";
+                    echo "<strong>State:</strong> <span class='nsz-vercel-state nsz-vercel-state-".strtolower($deployment['state'])."'>" . $deployment['state'] . "</span><br />";
 
                     if ($deployment['state'] === 'BUILDING' || $deployment['state'] === 'QUEUED') {
                         echo '<br /><button class="cancel-vercel-deploy button button-primary" data-id="'.$deployment['uid'].'">Cancel Deployment</button><hr />';
@@ -76,9 +97,6 @@ class Vercel_Dashboard {
             echo "<p>Please set your Vercel API token and Project ID in the <a href='".$url."'>plugin settings</a>.</p>";
         }
     }
-
-
-
 
     public function getDeployments($vercelApiToken, $projectId) {
         $url = "https://api.vercel.com/v6/deployments?projectId=$projectId&limit=5";

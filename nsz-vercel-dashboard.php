@@ -5,7 +5,7 @@
  * Plugin Name: 970 Design Vercel Dashboard
  * Plugin URI:  https://970design.com/
  * Description: A dashboard to keep track of Vercel deployments
- * Version:     1.0
+ * Version:     1.1
  * Author:      970Design
  * Author URI:  https://970design.com/
  * License:     GPLv2 or later
@@ -41,41 +41,5 @@ function nsz_vercel_dashboard_settings_link( $links ) {
     return $links;
 }
 
-
-add_action('admin_enqueue_scripts', 'nsz_vercel_dashboard_admin_style');
-function nsz_vercel_dashboard_admin_style() {
-    $url     = plugin_dir_url( __FILE__ );
-    $version = '1.0';
-
-    $vercelApiToken = get_option('nsz_vercel_api_key');
-    $projectId = get_option('nsz_vercel_project_id');
-    $gitRepo = get_option('nsz_vercel_git_repo');
-    $gitOrg = get_option('nsz_vercel_git_org');
-    $gitBranch = get_option('nsz_vercel_git_branch');
-
-    wp_enqueue_style( 'nsz_vercel_dashboard_admin_css', "{$url}assets/nsz-vercel-dashboard.css", false, $version);
-
-    wp_enqueue_script( 'nsz_vercel_dashboard_admin_js', "{$url}assets/nsz-vercel-dashboard.js", false, $version);
-
-    $params = array(
-        'api_token' => $vercelApiToken,
-        'project_id' => $projectId,
-        'git_repo' => $gitRepo,
-        'git_org' => $gitOrg,
-        'git_branch' => $gitBranch,
-    );
-
-    wp_localize_script( 'nsz_vercel_dashboard_admin_js', 'nsz_vercel_dashboard_admin_js', $params );
-}
-
-
 require_once 'Vercel_Dashboard.php';
-$custom_dashboard_widgets = new Vercel_Dashboard();
-
-
-
-
-
-
-
-
+$vercel_dashboard_widgets = new Vercel_Dashboard();
