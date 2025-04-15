@@ -66,18 +66,19 @@ class Vercel_Dashboard {
                     echo "<strong>Deployment ID:</strong> " . $deployment['uid'] . "<br />";
                     //echo "URL: " . $deployment['url'] . "<br />";
                     $createdAt = DateTime::createFromFormat('U', (intval($deployment['createdAt'] / 1000)))->setTimezone(new DateTimeZone('America/Denver'));
+                    $buildingAt = DateTime::createFromFormat('U', (intval($deployment['buildingAt'] / 1000)))->setTimezone(new DateTimeZone('America/Denver'));
                     echo "<strong>Created At:</strong> " . $createdAt->format('n/j/Y g:ia') . "<br />";
 
                     if ($deployment['state'] === 'READY') {
                         //show minutes and seconds it took between the createdat and ready
                         $readyAt = DateTime::createFromFormat('U', (intval($deployment['ready'] / 1000)));
-                        $interval = $createdAt->diff($readyAt);
+                        $interval = $buildingAt->diff($readyAt);
                         echo "<strong>Build Time:</strong> " . $interval->format('%i minutes %s seconds') . "<br />";
                     }
 
                     if ($deployment['state'] === 'BUILDING') {
                         //show elapsed time
-                        $elapsedTime = time() - (intval($deployment['createdAt'] / 1000));
+                        $elapsedTime = time() - (intval($deployment['buildingAt'] / 1000));
                         $elapsedTime = gmdate("H:i:s", $elapsedTime);
                         echo "<strong>Elapsed Time:</strong> " . $elapsedTime . "<br />";
                     }
