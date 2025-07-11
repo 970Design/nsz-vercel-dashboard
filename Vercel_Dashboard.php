@@ -66,7 +66,13 @@ class Vercel_Dashboard {
                     echo "<strong>Deployment ID:</strong> " . $deployment['uid'] . "<br />";
                     //echo "URL: " . $deployment['url'] . "<br />";
                     $createdAt = DateTime::createFromFormat('U', (intval($deployment['createdAt'] / 1000)))->setTimezone(new DateTimeZone('America/Denver'));
-                    $buildingAt = DateTime::createFromFormat('U', (intval($deployment['buildingAt'] / 1000)))->setTimezone(new DateTimeZone('America/Denver'));
+
+                    if ($deployment['buildingAt']) {
+                        $buildingAt = DateTime::createFromFormat('U', (intval($deployment['buildingAt'] / 1000)))->setTimezone(new DateTimeZone('America/Denver'));
+                    } else {
+                        $buildingAt = $createdAt; // If not building, use createdAt
+                    }
+
                     echo "<strong>Created At:</strong> " . $createdAt->format('n/j/Y g:ia') . "<br />";
 
                     if ($deployment['state'] === 'READY') {
