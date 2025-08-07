@@ -67,7 +67,7 @@ class Vercel_Dashboard {
                     //echo "URL: " . $deployment['url'] . "<br />";
                     $createdAt = DateTime::createFromFormat('U', (intval($deployment['createdAt'] / 1000)))->setTimezone(new DateTimeZone('America/Denver'));
 
-                    if ($deployment['buildingAt']) {
+                    if (isset($deployment['buildingAt'])) {
                         $buildingAt = DateTime::createFromFormat('U', (intval($deployment['buildingAt'] / 1000)))->setTimezone(new DateTimeZone('America/Denver'));
                     } else {
                         $buildingAt = $createdAt; // If not building, use createdAt
