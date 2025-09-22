@@ -1,108 +1,225 @@
 :root {
-    --nsz-design-video-container-width: 45rem;
-    --nsz-design-video-container-padding: 1.5rem;
-    --nsz-design-video-border-radius: 0.6rem;
-    --nsz-design-video-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
-    --nsz-design-video-blue: #0A9FCC;
-    --nsz-design-video-red: #cc0a0a;
-    --nsz-design-video-green: #2fcc0a;
-    --nsz-design-video-orange: #ff8c00;
-    --nsz-design-video-light-grey: #f6f7f7;
+    --nsz-design-vercel-container-width: 45rem;
+    --nsz-design-vercel-container-padding: 1.5rem;
+    --nsz-design-vercel-border-radius: 0.6rem;
+    --nsz-design-vercel-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
+    --nsz-design-vercel-cyan: #50e3c2;
+    --nsz-design-vercel-red: #e00;
+    --nsz-design-vercel-yellow: #f5a623;
+    --nsz-design-vercel-light-grey: #F0F0F0;
+}
+
+#nsz_vercel_dashboard_widget .inside {
+  padding: 0;
+  margin: 0;
 }
 
 .nsz-design-video-header {
-    margin-bottom: 1rem;
-    background: white;
+  margin-bottom: 1rem;
+  background: white;
 }
 
 .nsz-design-video-header-title {
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .nsz-design-video-wordmark {
-    max-width: 10rem;
+  max-width: 10rem;
 }
 
 .nsz-design-video-title {
-    padding: var(--nsz-design-video-container-padding);
-    padding-bottom: 0.5rem;
-    margin: 0;
+  padding: var(--nsz-design-vercel-container-padding);
+  padding-bottom: 0.5rem;
+  margin: 0;
 }
 
 .nsz-design-video-card {
-    box-shadow: var(--nsz-design-video-box-shadow);
-    border-radius: var(--nsz-design-video-border-radius);
-    overflow: hidden;
-    position: relative;
-    box-sizing: border-box;
-    background: white;
-    color: black;
+  box-shadow: var(--nsz-design-vercel-box-shadow);
+  border-radius: var(--nsz-design-vercel-border-radius);
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  background: white;
+  color: black;
 }
 
 .nsz-design-video-container {
-    margin: 0 auto;
-    text-align: left;
-    max-width: var(--nsz-design-video-container-width);
-    padding: var(--nsz-design-video-container-padding);
+  margin: 0 auto;
+  text-align: left;
+  max-width: var(--nsz-design-vercel-container-width);
+  padding: var(--nsz-design-vercel-container-padding);
 }
 
 .nsz-design-video-admin label {
-    font-weight: 500;
-    margin-bottom: 1rem;
-    display: block;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: block;
 }
 
 .nsz-design-video-admin input:not([type="submit"]) {
-    min-width: 22rem;
+  min-width: 22rem;
 }
 
 .nsz-design-video-admin .submit {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .nsz-design-video-admin a {
-    color: var(--nsz-design-video-blue);
+  color: var(--nsz-design-vercel-blue);
 }
 
 .nsz-design-video-row {
-    border-bottom: 1px solid var(--nsz-design-video-light-grey);
-    padding: var(--nsz-design-video-container-padding);
+  border-bottom: 1px solid var(--nsz-design-vercel-light-grey);
+  padding: var(--nsz-design-vercel-container-padding);
 }
 
 .nsz-design-video-row:last-of-type {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .nsz-design-video-footer {
-    padding: var(--nsz-design-video-container-padding);
-    padding-top: 0;
+  padding: var(--nsz-design-vercel-container-padding);
+  padding-top: 0;
 }
 
 .nsz-design-video-footer .submit {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .nsz-design-vercel-header {
-    background: #f6f7f7;
-    margin: -11px -11px 15px;
-    padding: 21px 11px;
-    border-bottom: 1px solid #f0f0f1;
+  background: var(--nsz-design-vercel-light-grey);
+  padding: 1.2em;
 }
 
-.nsz-vercel-state {
-    color: var(--nsz-design-video-blue);
+.nsz-design-vercel-header p {
+  margin-top: 0;
 }
 
-.nsz-vercel-state-ready {
-    color: var(--nsz-design-video-green);
+#nsz-design-vercel-deployments-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.nsz-vercel-state-error {
-    color: var(--nsz-design-video-red);
+#nsz-design-vercel-deployments-list li {
+  display: flex;
+  align-items: start;
+  gap: 3em;
+  padding: 1.2em;
+  margin: 0;
+  border-bottom: 1px solid var(--nsz-design-vercel-light-grey);
 }
 
-.nsz-vercel-state-canceled {
-    color: var(--nsz-design-video-orange);
+#nsz-design-vercel-deployments-list li button {
+  margin-left: auto;
+}
+
+#nsz-design-vercel-deployments-list li .nsz-vercel-deployment-id {
+  flex-basis: 7em;
+}
+
+#nsz-design-vercel-deployments-list .button-cancel {
+  border-color: var(--nsz-design-vercel-red);
+  background: var(--nsz-design-vercel-red);
+  color: white;
+
+  &:hover,
+  &:focus {
+    background: color-mix(in srgb, var(--nsz-design-vercel-red), black 10%);
+    border-color: color-mix(in srgb, var(--nsz-design-vercel-red), black 10%);
+    color: white;
+  }
+}
+
+.nsz-design-vercel-header .start-vercel-deploy {
+  position: relative;
+  z-index: 10;
+}
+
+.nsz-design-vercel-header .nsz-vercel-deploy-button-wrapper,
+#nsz-design-vercel-deployments-list .cancel-vercel-deploy {
+  display: inline-grid;
+  justify-items: center;
+  align-items: center;
+
+  * {
+    grid-area: 1 / 1;
+  }
+
+  svg {
+    height: 30px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    position: relative;
+    z-index: 9;
+  }
+
+  button.loading + svg {
+    opacity: 1;
+    z-index: 11;
+  }
+}
+
+.nsz-vercel-state.nsz-vercel-state-building,
+.nsz-vercel-state.nsz-vercel-state-ready,
+.nsz-vercel-state.nsz-vercel-state-error,
+.nsz-vercel-state.nsz-vercel-state-canceled {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+
+  &::before {
+    content: "";
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 50%;
+  }
+}
+
+.nsz-vercel-state.nsz-vercel-state-building::before {
+  background: var(--nsz-design-vercel-yellow);
+}
+
+.nsz-vercel-state.nsz-vercel-state-ready::before {
+  background: var(--nsz-design-vercel-cyan);
+}
+
+.nsz-vercel-state.nsz-vercel-state-error::before {
+  background: var(--nsz-design-vercel-red);
+}
+
+.nsz-vercel-state.nsz-vercel-state-canceled::before {
+  background: var(--nsz-design-vercel-light-grey);
+}
+
+.nsz-design-vercel-header-notification {
+  border: 1px solid black;
+  display: none;
+  width: auto;
+  padding: 0.5em 1em;
+  border-radius: 3px;
+  font-weight: 600;
+  color: black;
+  opacity: 0;
+  height: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  &.success,
+  &.error {
+    display: flex;
+    opacity: 1;
+    height: auto;
+  }
+
+  &.success {
+    border-color: rgba(0, 226, 0, 1);
+    background: rgba(0, 226, 0, 0.1);
+  }
+
+  &.error {
+    border-color: rgba(227, 0, 0, 1);
+    background: rgba(227, 0, 0, 0.1);
+  }
 }
