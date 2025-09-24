@@ -17,7 +17,7 @@ let deploymentPollingInterval = null;
 
 // Function to set cancel button loading state
 function setCancelButtonLoading(deploymentId, loading = true) {
-    const button = document.querySelector(`.cancel-vercel-deploy [data-id="${deploymentId}"]`);
+    const button = document.querySelector(`.cancel-vercel-deploy[data-id="${deploymentId}"]`);
 
     if (!button) return;
 
@@ -295,7 +295,7 @@ function startDeploymentPolling() {
     // Then refresh every second for efficient updates
     deploymentPollingInterval = setInterval(function() {
         refreshDeployments();
-    }, 1000);
+    }, 5000);
 }
 
 
