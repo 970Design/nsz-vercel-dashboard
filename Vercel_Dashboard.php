@@ -147,12 +147,12 @@ class Vercel_Dashboard {
         $html .= "<div class='nsz-vercel-deployment-status'>";
         $html .= "<span class='nsz-vercel-state nsz-vercel-state-".strtolower($deployment['state'])."'>" . ucfirst(strtolower($deployment['state'])) . "</span>";
 
-        $createdAt = DateTime::createFromFormat('U', (intval($deployment['createdAt'] / 1000)))->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        $createdAt = new DateTime('@' . intval($deployment['createdAt'] / 1000), new DateTimeZone(date_default_timezone_get()));
 
         if ($deployment['state'] === 'READY' || $deployment['state'] === 'ERROR' || $deployment['state'] === 'CANCELED')  {
             if (isset($deployment['ready']) && isset($deployment['buildingAt'])) {
-                $buildingAt = DateTime::createFromFormat('U', (intval($deployment['buildingAt'] / 1000)))->setTimezone(new DateTimeZone(date_default_timezone_get()));
-                $readyAt = DateTime::createFromFormat('U', (intval($deployment['ready'] / 1000)));
+                $buildingAt = new DateTime('@' . intval($deployment['buildingAt'] / 1000), new DateTimeZone(date_default_timezone_get()));
+                $readyAt = new DateTime('@' . intval($deployment['ready'] / 1000));
                 $interval = $buildingAt->diff($readyAt);
 
                 $minutes = $interval->i;
