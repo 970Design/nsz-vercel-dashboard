@@ -1,12 +1,12 @@
 :root {
-    --nsz-design-vercel-container-width: 45rem;
-    --nsz-design-vercel-container-padding: 1.5rem;
-    --nsz-design-vercel-border-radius: 0.6rem;
-    --nsz-design-vercel-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
-    --nsz-design-vercel-cyan: #50e3c2;
-    --nsz-design-vercel-red: #e00;
-    --nsz-design-vercel-yellow: #f5a623;
-    --nsz-design-vercel-light-grey: #F0F0F0;
+  --nsz-design-vercel-container-width: 45rem;
+  --nsz-design-vercel-container-padding: 1.5rem;
+  --nsz-design-vercel-border-radius: 0.6rem;
+  --nsz-design-vercel-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
+  --nsz-design-vercel-cyan: #50e3c2;
+  --nsz-design-vercel-red: #e00;
+  --nsz-design-vercel-yellow: #f5a623;
+  --nsz-design-vercel-light-grey: #F0F0F0;
 }
 
 #nsz_vercel_dashboard_widget .inside {
@@ -222,4 +222,8 @@
     border-color: rgba(227, 0, 0, 1);
     background: rgba(227, 0, 0, 0.1);
   }
+}
+
+.nsz-vercel-dash-error-holder {
+  padding: 1rem;
 }

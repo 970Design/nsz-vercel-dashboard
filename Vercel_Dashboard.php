@@ -8,7 +8,7 @@ class Vercel_Dashboard {
     public $gitBranch = null;
 
     public function __construct() {
-        $this->vercelApiToken = get_option('nsz_vercel_api_key');
+        $this->vercelApiToken = nsz_decrypt_value(get_option('nsz_vercel_api_key'));
         $this->projectId = get_option('nsz_vercel_project_id');
         $this->gitRepo = get_option('nsz_vercel_git_repo');
         $this->gitOrg = get_option('nsz_vercel_git_org');
@@ -81,10 +81,10 @@ class Vercel_Dashboard {
                 echo $this->generateDeploymentsListHtml($deployments);
                 echo '</ul>';
             } catch (Exception $e) {
-                echo 'Error: ' . $e->getMessage();
+                echo '<div class="nsz-vercel-dash-error-holder">Error: ' . $e->getMessage().'</div>';
             }
         } else {
-            echo "<p>Please set your Vercel API token and Project ID in the <a href='".$settings_url."'>plugin settings</a>.</p>";
+            echo "<div class='nsz-vercel-dash-error-holder'>Please set your Vercel API token and Project ID in the <a href='".$settings_url."'>plugin settings</a>.</div>";
         }
     }
 

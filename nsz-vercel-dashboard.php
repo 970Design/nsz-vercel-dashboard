@@ -5,7 +5,7 @@
  * Plugin Name: 970 Design Vercel Dashboard
  * Plugin URI:  https://970design.com/
  * Description: A dashboard to keep track of Vercel deployments
- * Version:     1.5
+ * Version:     1.6
  * Author:      970Design
  * Author URI:  https://970design.com/
  * License:     GPLv2 or later

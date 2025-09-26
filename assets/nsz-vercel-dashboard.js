@@ -82,31 +82,31 @@ function cancelVercelDeploy(id) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Use event delegation for cancel buttons - no need to re-bind after updates
-  const deploymentsList = document.getElementById('nsz-design-vercel-deployments-list');
-  if (deploymentsList) {
-    deploymentsList.addEventListener('click', function(e) {
-      // Check if clicked element is a cancel button or inside one
-      const cancelButton = e.target.closest('.cancel-vercel-deploy');
-      if (cancelButton) {
-        e.preventDefault();
-        const id = cancelButton.getAttribute('data-id');
-        cancelVercelDeploy(id);
-      }
-    });
-  }
+    // Use event delegation for cancel buttons - no need to re-bind after updates
+    const deploymentsList = document.getElementById('nsz-design-vercel-deployments-list');
+    if (deploymentsList) {
+        deploymentsList.addEventListener('click', function(e) {
+            // Check if clicked element is a cancel button or inside one
+            const cancelButton = e.target.closest('.cancel-vercel-deploy');
+            if (cancelButton) {
+                e.preventDefault();
+                const id = cancelButton.getAttribute('data-id');
+                cancelVercelDeploy(id);
+            }
+        });
+    }
 
-  // start a new deployment click event listener
-  const startButton = document.querySelector('.start-vercel-deploy');
-  if (startButton) {
-    startButton.addEventListener('click', function (e) {
-        e.preventDefault();
-        startVercelDeploy();
-    });
-  }
+    // start a new deployment click event listener
+    const startButton = document.querySelector('.start-vercel-deploy');
+    if (startButton) {
+        startButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            startVercelDeploy();
+        });
+    }
 
-  // Start automatic polling for deployment updates
-  startDeploymentPolling();
+    // Start automatic polling for deployment updates
+    startDeploymentPolling();
 });
 
 // Function to refresh deployments via AJAX with differential updates
