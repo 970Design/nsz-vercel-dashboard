@@ -1,4 +1,4 @@
-// Function to set button loading state
+
 function setDeployButtonLoading(loading = true) {
     const button = document.querySelector('.nsz-design-vercel-header .start-vercel-deploy');
     if (!button) return;
@@ -12,10 +12,8 @@ function setDeployButtonLoading(loading = true) {
     }
 }
 
-// Global variable to track polling interval so we have real time updates
 let deploymentPollingInterval = null;
 
-// Function to set cancel button loading state
 function setCancelButtonLoading(deploymentId, loading = true) {
     const button = document.querySelector(`.cancel-vercel-deploy[data-id="${deploymentId}"]`);
 
@@ -30,9 +28,7 @@ function setCancelButtonLoading(deploymentId, loading = true) {
     }
 }
 
-// Cancel a Vercel deployment
 function cancelVercelDeploy(id) {
-    // Set cancel button to loading state
     setCancelButtonLoading(id, true);
 
     let url = 'https://api.vercel.com/v12/deployments/'+id+'/cancel';
@@ -41,10 +37,7 @@ function cancelVercelDeploy(id) {
     xhr.setRequestHeader('Authorization', 'Bearer ' + nsz_vercel_dashboard_admin_js.api_token);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            // Don't reset button state here - polling will remove the button when status updates
-            // Automatic polling will update the UI
         } else if (xhr.readyState === 4) {
-            // Handle different error types
             let errorMessage = 'Error cancelling deployment';
 
             if (xhr.status === 401) {
@@ -60,12 +53,13 @@ function cancelVercelDeploy(id) {
                     const response = JSON.parse(xhr.responseText);
                     if (response.error && response.error.message) {
                         errorMessage = response.error.message;
+                        console.error(errorMessage);
                     }
                 } catch (e) {
-                    // Use default error message if JSON parsing fails
+                    console.error(e, errorMessage);
                 }
             }
-            // Reset cancel button state on error
+            console.error(errorMessage);
             setCancelButtonLoading(id, false);
         }
     };
@@ -73,8 +67,6 @@ function cancelVercelDeploy(id) {
     xhr.onerror = function() {
         console.error('Network error cancelling deployment');
         alert('Network error - check your connection and try again');
-
-        // Reset cancel button state on network error
         setCancelButtonLoading(id, false);
     };
 
@@ -82,11 +74,9 @@ function cancelVercelDeploy(id) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Use event delegation for cancel buttons - no need to re-bind after updates
     const deploymentsList = document.getElementById('nsz-design-vercel-deployments-list');
     if (deploymentsList) {
         deploymentsList.addEventListener('click', function(e) {
-            // Check if clicked element is a cancel button or inside one
             const cancelButton = e.target.closest('.cancel-vercel-deploy');
             if (cancelButton) {
                 e.preventDefault();
@@ -96,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // start a new deployment click event listener
     const startButton = document.querySelector('.start-vercel-deploy');
     if (startButton) {
         startButton.addEventListener('click', function (e) {
@@ -104,12 +93,10 @@ document.addEventListener('DOMContentLoaded', function() {
             startVercelDeploy();
         });
     }
-
-    // Start automatic polling for deployment updates
     startDeploymentPolling();
 });
 
-// Function to refresh deployments via AJAX with differential updates
+
 function refreshDeployments() {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', nsz_vercel_dashboard_admin_js.ajax_url, true);
@@ -135,22 +122,19 @@ function refreshDeployments() {
         }
     };
 
-    // Send the AJAX request
     const formData = 'action=refresh_vercel_deployments&nonce=' + nsz_vercel_dashboard_admin_js.nonce;
     xhr.send(formData);
 }
 
-// Function to update deployments list with differential updates
+
 function updateDeploymentsList(deployments) {
     const deploymentsList = document.getElementById('nsz-design-vercel-deployments-list');
     if (!deploymentsList) return;
 
-    // Get existing deployment items
     const existingItems = deploymentsList.querySelectorAll('[data-deployment-id]');
     const existingIds = Array.from(existingItems).map(item => item.getAttribute('data-deployment-id'));
     const newIds = deployments.map(d => d.uid);
 
-    // Remove deployments that no longer exist
     existingIds.forEach(id => {
         if (!newIds.includes(id)) {
             const item = deploymentsList.querySelector(`[data-deployment-id="${id}"]`);
@@ -158,26 +142,21 @@ function updateDeploymentsList(deployments) {
         }
     });
 
-    // Clear the list and rebuild in correct order
     deploymentsList.innerHTML = '';
 
-    // Add deployments in the correct order (newest first)
     deployments.forEach(deployment => {
         const existingItem = document.querySelector(`[data-deployment-id="${deployment.uid}"]`);
 
         if (existingItem) {
-            // Update existing item if data has changed
             updateDeploymentItem(existingItem, deployment);
             deploymentsList.appendChild(existingItem);
         } else {
-            // Create new deployment item
             const newItem = createDeploymentItem(deployment);
             deploymentsList.appendChild(newItem);
         }
     });
 }
 
-// Function to create a new deployment item element
 function createDeploymentItem(deployment) {
     const li = document.createElement('li');
     li.setAttribute('data-deployment-id', deployment.uid);
@@ -187,7 +166,6 @@ function createDeploymentItem(deployment) {
     html += `<div class='nsz-vercel-deployment-status'>`;
     html += `<span class='nsz-vercel-state nsz-vercel-state-${deployment.state.toLowerCase()}'>${deployment.state.charAt(0) + deployment.state.slice(1).toLowerCase()}</span>`;
 
-    // Add build time if available
     if (deployment.buildTime) {
         html += deployment.buildTime;
     }
@@ -195,7 +173,6 @@ function createDeploymentItem(deployment) {
     html += ` (${deployment.formattedTime})`;
     html += `</div>`;
 
-    // Add cancel button for active deployments
     if (deployment.isActive) {
         html += `
         <button class="cancel-vercel-deploy button button-cancel" data-id="${deployment.uid}">
@@ -208,15 +185,13 @@ function createDeploymentItem(deployment) {
     return li;
 }
 
-// Function to update an existing deployment item
 function updateDeploymentItem(element, deployment) {
-    // Update the deployment ID
+
     const idElement = element.querySelector('.nsz-vercel-deployment-id');
     if (idElement && idElement.textContent !== deployment.shortId) {
         idElement.textContent = deployment.shortId;
     }
 
-    // Update state span
     const stateElement = element.querySelector('.nsz-vercel-state');
     if (stateElement) {
         const newStateClass = `nsz-vercel-state nsz-vercel-state-${deployment.state.toLowerCase()}`;
@@ -230,7 +205,6 @@ function updateDeploymentItem(element, deployment) {
         }
     }
 
-    // Update the entire status div content to handle build time changes
     const statusElement = element.querySelector('.nsz-vercel-deployment-status');
     if (statusElement) {
         let newContent = `<span class='nsz-vercel-state nsz-vercel-state-${deployment.state.toLowerCase()}'>${deployment.state.charAt(0) + deployment.state.slice(1).toLowerCase()}</span>`;
@@ -246,7 +220,6 @@ function updateDeploymentItem(element, deployment) {
         }
     }
 
-    // Handle cancel button - add if needed, remove if not
     const existingButton = element.querySelector('.cancel-vercel-deploy');
     if (deployment.isActive && !existingButton) {
         // Add cancel button
@@ -257,7 +230,6 @@ function updateDeploymentItem(element, deployment) {
         </button>`;
         element.insertAdjacentHTML('beforeend', buttonHtml);
     } else if (!deployment.isActive && existingButton) {
-        // Remove cancel button
         existingButton.remove();
     }
 }
@@ -276,7 +248,6 @@ function checkPolling() {
     }
 }
 
-// Function to stop polling
 function stopDeploymentPolling() {
     if (deploymentPollingInterval) {
         clearInterval(deploymentPollingInterval);
@@ -284,9 +255,7 @@ function stopDeploymentPolling() {
     }
 }
 
-// Function to start automatic polling
 function startDeploymentPolling() {
-    // Stop any existing polling first
     stopDeploymentPolling();
 
     // Refresh immediately when page loads
@@ -300,7 +269,6 @@ function startDeploymentPolling() {
 
 
 function startVercelDeploy() {
-    // Set button to loading state
     setDeployButtonLoading(true);
 
     let url = 'https://api.vercel.com/v13/deployments?forceNew=1&skipAutoDetectionConfirmation1';
@@ -310,15 +278,12 @@ function startVercelDeploy() {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            // Restart polling since we have a new active deployment
             startDeploymentPolling();
 
-            // Reset button state after a short delay to show success
             setTimeout(() => {
                 setDeployButtonLoading(false);
             }, 1000);
         } else if (xhr.readyState === 4) {
-            // Reset button state on error
             setDeployButtonLoading(false);
         }
     };

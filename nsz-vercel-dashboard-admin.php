@@ -39,13 +39,11 @@ if (!function_exists('nsz_decrypt_value')) {
             return '';
         }
 
-        // Verify we have enough data for IV (16 bytes) plus at least 1 byte of encrypted data
         if (strlen($decoded) < 17) {
             return '';
         }
 
         $iv = substr($decoded, 0, 16);
-        // Verify IV length is exactly 16 bytes
         if (strlen($iv) !== 16) {
             return '';
         }
@@ -85,55 +83,42 @@ if (!function_exists('nsz_obfuscate_string')) {
 }
 
 function nsz_vercel_dashboard_settings_page() {
-    // Must check that the user has the required capability
     if (!current_user_can('manage_options')) {
         wp_die(__('You do not have sufficient permissions to access this page.'));
     }
 
-    // Define variables for the field and option names
     $nsz_vercel_api_field = 'nsz_vercel_api_key';
     $nsz_vercel_project_id_field = 'nsz_vercel_project_id';
     $nsz_vercel_git_repo = 'nsz_vercel_git_repo';
     $nsz_vercel_git_org = 'nsz_vercel_git_org';
     $nsz_vercel_git_branch = 'nsz_vercel_git_branch';
 
-    // Check if the form has been submitted
     if (isset($_POST['submitted']) && $_POST['submitted'] == 'Y') {
 
-        // Sanitize and save the API Key
         $nsz_vercel_api_value = get_option($nsz_vercel_api_field, null);
         if (isset($_POST[$nsz_vercel_api_field]) && !str_contains($_POST[$nsz_vercel_api_field], '*')) {
             $nsz_vercel_api_value = nsz_encrypt_value(sanitize_text_field($_POST[$nsz_vercel_api_field]));
         }
         update_option($nsz_vercel_api_field, $nsz_vercel_api_value);
 
-        // Sanitize and save the Project ID
         $nsz_vercel_project_id_value = sanitize_text_field($_POST[$nsz_vercel_project_id_field] ?? '');
         update_option($nsz_vercel_project_id_field, $nsz_vercel_project_id_value);
 
-        // Sanitize and save the Git Repo
         $nsz_vercel_git_repo_value = sanitize_text_field($_POST[$nsz_vercel_git_repo] ?? '');
         update_option($nsz_vercel_git_repo, $nsz_vercel_git_repo_value);
 
-        // Sanitize and save the Git Org
         $nsz_vercel_git_org_value = sanitize_text_field($_POST[$nsz_vercel_git_org] ?? '');
         update_option($nsz_vercel_git_org, $nsz_vercel_git_org_value);
 
-        // Sanitize and save the Git Branch
         $nsz_vercel_git_branch_value = sanitize_text_field($_POST[$nsz_vercel_git_branch] ?? '');
         update_option($nsz_vercel_git_branch, $nsz_vercel_git_branch_value);
-
-        // Display a success message
         ?>
         <div class="updated"><p><strong>Settings Updated</strong></p></div>
         <?php
     }
 
-    // Retrieve the current values to display in the form
     $nsz_vercel_api_value = nsz_decrypt_value(get_option($nsz_vercel_api_field, ''));
     $nsz_vercel_project_id_value = get_option($nsz_vercel_project_id_field, '');
-
-    // Assets
     $wordmark_url = plugins_url( 'assets/wordmark.svg', __FILE__ );
 
     ?>

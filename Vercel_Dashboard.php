@@ -59,7 +59,7 @@ class Vercel_Dashboard {
         ));
         if ($this->vercelApiToken && $this->projectId) {
             try {
-                $deployments = $this->getDeployments($this->vercelApiToken, $this->projectId);
+                $deployments = $this->get_deployments($this->vercelApiToken, $this->projectId);
 
                 if ($this->gitOrg && $this->gitRepo && $this->gitBranch) {
                     echo '<div class="nsz-design-vercel-header">
@@ -78,7 +78,7 @@ class Vercel_Dashboard {
                 }
 
                 echo '<ul id="nsz-design-vercel-deployments-list">';
-                echo $this->generateDeploymentsListHtml($deployments);
+                echo $this->generate_deployments_list_html($deployments);
                 echo '</ul>';
             } catch (Exception $e) {
                 echo '<div class="nsz-vercel-dash-error-holder">Error: ' . $e->getMessage().'</div>';
@@ -88,7 +88,7 @@ class Vercel_Dashboard {
         }
     }
 
-    public function getDeployments($vercelApiToken, $projectId) {
+    public function get_deployments($vercelApiToken, $projectId) {
         $url = "https://api.vercel.com/v6/deployments?projectId=$projectId&limit=8";
         $headers = [
             "Authorization: Bearer $vercelApiToken"
@@ -113,18 +113,15 @@ class Vercel_Dashboard {
         return $deployments['deployments'];
     }
 
-    // Helper method to format "time ago"
-    private function getTimeAgo($datetime) {
+    private function get_time_ago($datetime) {
         $now = new DateTime('now', new DateTimeZone(date_default_timezone_get()));
         $today = $now->format('Y-m-d');
         $deploymentDate = $datetime->format('Y-m-d');
 
-        // If it's not today, show the date like "Sep 21"
         if ($deploymentDate !== $today) {
             return $datetime->format('M j');
         }
 
-        // For today, show time ago
         $interval = $now->diff($datetime);
 
         if ($interval->h > 0) {
@@ -135,12 +132,10 @@ class Vercel_Dashboard {
             return $interval->i . 'm ago';
         }
 
-        // If less than a minute, show "Just now"
         return 'Just now';
     }
 
-    // Reusable method to generate HTML for a single deployment
-    private function generateDeploymentHtml($deployment) {
+    private function generate_deployment_html($deployment) {
         $html = '<li>';
         $html .= "<strong class='nsz-vercel-deployment-id'>" . substr($deployment['uid'], 4, 9) . "</strong>";
 
@@ -172,11 +167,9 @@ class Vercel_Dashboard {
             $html .= "" . $elapsedTime . "";
         }
 
-        $html .= ' (' . $this->getTimeAgo($createdAt) . ')';
+        $html .= ' (' . $this->get_time_ago($createdAt) . ')';
 
         $html .= "</div>";
-
-        // $html .= "<div class='nsz-vercel-deployment-timestamp'>" . $this->getTimeAgo($createdAt) . "</div>";
 
         if ($deployment['state'] === 'BUILDING' || $deployment['state'] === 'QUEUED') {
             $html .= '
@@ -187,27 +180,24 @@ class Vercel_Dashboard {
         return $html;
     }
 
-    // Reusable method to generate HTML for all deployments
-    private function generateDeploymentsListHtml($deployments) {
+    private function generate_deployments_list_html($deployments) {
         $html = '';
         foreach ($deployments as $deployment) {
-            $html .= $this->generateDeploymentHtml($deployment);
+            $html .= $this->generate_deployment_html($deployment);
         }
         return $html;
     }
 
-    // Refresh deployment list
     public function ajax_refresh_deployments() {
-        // Security check
+
         if (!wp_verify_nonce($_POST['nonce'], 'vercel_dashboard_nonce')) {
             wp_die('Security check failed');
         }
 
         if ($this->vercelApiToken && $this->projectId) {
             try {
-                $deployments = $this->getDeployments($this->vercelApiToken, $this->projectId);
+                $deployments = $this->get_deployments($this->vercelApiToken, $this->projectId);
 
-                // Return structured data instead of HTML for more efficient updates
                 $formattedDeployments = array();
                 foreach ($deployments as $deployment) {
                     $createdAt = new DateTime('@' . intval($deployment['createdAt'] / 1000));
@@ -239,7 +229,7 @@ class Vercel_Dashboard {
                         'shortId' => substr($deployment['uid'], 4, 9),
                         'state' => $deployment['state'],
                         'createdAt' => $deployment['createdAt'],
-                        'formattedTime' => $this->getTimeAgo($createdAt),
+                        'formattedTime' => $this->get_time_ago($createdAt),
                         'buildingAt' => isset($deployment['buildingAt']) ? $deployment['buildingAt'] : null,
                         'buildTime' => $buildTime,
                         'isActive' => in_array($deployment['state'], ['BUILDING', 'QUEUED'])
