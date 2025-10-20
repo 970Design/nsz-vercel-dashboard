@@ -2,7 +2,7 @@
 Contributors: 970design
 Tags: vercel, deployment, dashboard, development
 Requires at least: 5.0
-Tested up to: 6.8.4
+Tested up to: 6.8.3
 Stable tag: 1.8
 Requires PHP: 7.4
 License: GPLv2 or later
