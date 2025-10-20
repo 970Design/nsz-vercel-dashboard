@@ -5,7 +5,7 @@
  * Plugin Name: 970 Design Vercel Dashboard
  * Plugin URI:  https://970design.com/
  * Description: A dashboard to keep track of Vercel deployments
- * Version:     1.9
+ * Version:     1.10
  * Author:      970Design
  * Author URI:  https://970design.com/
  * License:     GPLv2 or later
@@ -44,7 +44,7 @@ function nsz_vercel_dashboard_settings_link( $links ) {
 require_once 'Vercel_Dashboard.php';
 $vercel_dashboard_widgets = new Vercel_Dashboard();
 
-require 'path/to/plugin-update-checker/plugin-update-checker.php';
+require 'plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $myUpdateChecker = PucFactory::buildUpdateChecker(
