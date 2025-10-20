@@ -44,6 +44,7 @@ function nsz_vercel_dashboard_settings_link( $links ) {
 require_once 'Vercel_Dashboard.php';
 $vercel_dashboard_widgets = new Vercel_Dashboard();
 
+/*
 require 'plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
@@ -52,3 +53,4 @@ $myUpdateChecker = PucFactory::buildUpdateChecker(
     __FILE__, //Full path to the main plugin file or functions.php.
     'nsz-vercel-dashboard'
 );
+*/
