@@ -34,7 +34,7 @@ The settings can be found under Settings -> Vercel Dashboard in your WordPress a
 
 ![Configuration Page](/assets/screenshot-1.png?raw=true "Configuration Page")
 
-![Vercel Dashboard](/assets/screenshot-1.png?raw=true "Vercel Dashboard")
+![Vercel Dashboard](/assets/screenshot-2.png?raw=true "Vercel Dashboard")
 
 ## License
 
