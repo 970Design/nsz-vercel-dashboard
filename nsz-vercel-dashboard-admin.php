@@ -122,7 +122,7 @@ function nsz_vercel_dashboard_settings_page() {
     $wordmark_url = plugins_url( 'assets/wordmark.svg', __FILE__ );
 
     ?>
-    <section class="nsz-design-video-admin">
+    <section class="nsz-design-vercel-dash-admin">
 
         <header class="nsz-design-video-header">
             <div class="nsz-design-video-container">
