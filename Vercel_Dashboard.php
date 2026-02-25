@@ -26,8 +26,9 @@ class Vercel_Dashboard {
     }
 
     public function nsz_vercel_dashboard_admin_style() {
-        $url     = plugin_dir_url( __FILE__ );
-        $version = '1.0.1';
+        $url         = plugin_dir_url( __FILE__ );
+        $plugin_data = get_plugin_data( __DIR__ . '/nsz-vercel-dashboard.php' );
+        $version     = $plugin_data['Version'];
 
         wp_enqueue_style( 'nsz_vercel_dashboard_admin_css', "{$url}assets/nsz-vercel-dashboard.css", false, $version);
 
