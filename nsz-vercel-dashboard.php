@@ -5,7 +5,7 @@
  * Plugin Name: 970 Design Vercel Dashboard
  * Plugin URI:  https://970design.com/
  * Description: A dashboard to keep track of Vercel deployments
- * Version:     1.14
+ * Version:     1.15
  * Author:      970Design
  * Author URI:  https://970design.com/
  * License:     GPLv2 or later
@@ -26,6 +26,7 @@ if (!defined('WPINC')) {
 }
 
 require_once 'nsz-vercel-dashboard-admin.php';
+require_once 'nsz-vercel-autodeploy.php';
 
 add_filter( 'plugin_action_links_nsz-vercel-dashboard/nsz-vercel-dashboard.php', 'nsz_vercel_dashboard_settings_link' );
 function nsz_vercel_dashboard_settings_link( $links ) {

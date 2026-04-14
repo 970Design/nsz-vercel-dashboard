@@ -92,6 +92,8 @@ function nsz_vercel_dashboard_settings_page() {
     $nsz_vercel_git_repo = 'nsz_vercel_git_repo';
     $nsz_vercel_git_org = 'nsz_vercel_git_org';
     $nsz_vercel_git_branch = 'nsz_vercel_git_branch';
+    $nsz_vercel_enable_autodeploy_field = 'nsz_vercel_enable_autodeploy';
+    $nsz_vercel_deployment_webhook_url_field = 'nsz_vercel_deployment_webhook_url';
 
     if (isset($_POST['submitted']) && $_POST['submitted'] == 'Y') {
 
@@ -112,6 +114,12 @@ function nsz_vercel_dashboard_settings_page() {
 
         $nsz_vercel_git_branch_value = sanitize_text_field($_POST[$nsz_vercel_git_branch] ?? '');
         update_option($nsz_vercel_git_branch, $nsz_vercel_git_branch_value);
+
+        $nsz_vercel_enable_autodeploy_value = isset($_POST[$nsz_vercel_enable_autodeploy_field]) ? 1 : 0;
+        update_option($nsz_vercel_enable_autodeploy_field, $nsz_vercel_enable_autodeploy_value);
+
+        $nsz_vercel_deployment_webhook_url_value = esc_url_raw($_POST[$nsz_vercel_deployment_webhook_url_field] ?? '');
+        update_option($nsz_vercel_deployment_webhook_url_field, $nsz_vercel_deployment_webhook_url_value);
         ?>
         <div class="updated"><p><strong>Settings Updated</strong></p></div>
         <?php
@@ -119,6 +127,8 @@ function nsz_vercel_dashboard_settings_page() {
 
     $nsz_vercel_api_value = nsz_decrypt_value(get_option($nsz_vercel_api_field, ''));
     $nsz_vercel_project_id_value = get_option($nsz_vercel_project_id_field, '');
+    $nsz_vercel_enable_autodeploy_value = get_option($nsz_vercel_enable_autodeploy_field, false);
+    $nsz_vercel_deployment_webhook_url_value = get_option($nsz_vercel_deployment_webhook_url_field, '');
     $wordmark_url = plugins_url( 'assets/wordmark.svg', __FILE__ );
 
     ?>
@@ -169,6 +179,22 @@ function nsz_vercel_dashboard_settings_page() {
                         <div>
                             <label for="<?php echo esc_attr($nsz_vercel_git_branch); ?>">Git Branch: <span class="required">*</span></label>
                             <input required type="text" id="<?php echo esc_attr($nsz_vercel_git_branch); ?>" name="<?php echo esc_attr($nsz_vercel_git_branch); ?>" value="<?php echo esc_html(get_option($nsz_vercel_git_branch, '')); ?>" size="35">
+                            <br>
+                        </div>
+                    </div>
+                    <div class="nsz-design-video-row">
+                        <div>
+                            <label for="<?php echo esc_attr($nsz_vercel_enable_autodeploy_field); ?>">
+                                <input type="checkbox" id="<?php echo esc_attr($nsz_vercel_enable_autodeploy_field); ?>" name="<?php echo esc_attr($nsz_vercel_enable_autodeploy_field); ?>" value="1" <?php checked(1, $nsz_vercel_enable_autodeploy_value, true); ?> />
+                                Enable Autodeploy
+                            </label>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="nsz-design-video-row">
+                        <div>
+                            <label for="<?php echo esc_attr($nsz_vercel_deployment_webhook_url_field); ?>">Deployment Webhook URL:</label>
+                            <input type="url" id="<?php echo esc_attr($nsz_vercel_deployment_webhook_url_field); ?>" name="<?php echo esc_attr($nsz_vercel_deployment_webhook_url_field); ?>" value="<?php echo esc_url($nsz_vercel_deployment_webhook_url_value); ?>" size="35">
                             <br>
                         </div>
                     </div>
