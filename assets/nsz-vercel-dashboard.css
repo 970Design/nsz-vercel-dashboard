@@ -61,7 +61,7 @@
   display: block;
 }
 
-.nsz-design-vercel-dash-admin input:not([type="submit"]) {
+.nsz-design-vercel-dash-admin input:not([type="submit"]):not([type="checkbox"]) {
   min-width: 22rem;
 }
 
