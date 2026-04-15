@@ -2,6 +2,77 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+/**
+ * Cancel any active (BUILDING / QUEUED / INITIALIZING) deployments for the
+ * configured Vercel project. Used to prevent a backlog of auto-deploys when
+ * pages are being edited quickly — a new autodeploy supersedes any in-flight
+ * one that hasn't finished building yet.
+ *
+ * Silently no-ops if the Vercel API token or project ID are not configured
+ * (the webhook itself still fires — this just skips the cancel step).
+ */
+function nsz_vercel_cancel_active_deployments() {
+    $api_token = nsz_decrypt_value(get_option('nsz_vercel_api_key', ''));
+    $project_id = get_option('nsz_vercel_project_id', '');
+
+    if (empty($api_token) || empty($project_id)) {
+        error_log('Autodeploy cancel skipped: Vercel API token or project ID not configured');
+        return;
+    }
+
+    $list_url = add_query_arg(
+        [
+            'projectId' => $project_id,
+            'state'     => 'BUILDING,QUEUED,INITIALIZING',
+            'limit'     => 20,
+        ],
+        'https://api.vercel.com/v6/deployments'
+    );
+
+    $response = wp_remote_get($list_url, [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $api_token,
+        ],
+        'timeout' => 10,
+    ]);
+
+    if (is_wp_error($response)) {
+        error_log('Autodeploy cancel: failed to fetch active deployments — ' . $response->get_error_message());
+        return;
+    }
+
+    $body = json_decode(wp_remote_retrieve_body($response), true);
+    if (!is_array($body) || empty($body['deployments'])) {
+        return;
+    }
+
+    foreach ($body['deployments'] as $deployment) {
+        if (empty($deployment['uid'])) {
+            continue;
+        }
+
+        $cancel_url = 'https://api.vercel.com/v12/deployments/' . rawurlencode($deployment['uid']) . '/cancel';
+        $cancel_response = wp_remote_request($cancel_url, [
+            'method'  => 'PATCH',
+            'headers' => [
+                'Authorization' => 'Bearer ' . $api_token,
+            ],
+            'timeout' => 10,
+        ]);
+
+        if (is_wp_error($cancel_response)) {
+            error_log('Autodeploy cancel: failed to cancel ' . $deployment['uid'] . ' — ' . $cancel_response->get_error_message());
+        } else {
+            $status = wp_remote_retrieve_response_code($cancel_response);
+            if ($status >= 200 && $status < 300) {
+                error_log('Autodeploy cancel: canceled in-flight deployment ' . $deployment['uid']);
+            } else {
+                error_log('Autodeploy cancel: unexpected status ' . $status . ' cancelling ' . $deployment['uid']);
+            }
+        }
+    }
+}
+
 function nsz_vercel_trigger_deployment() {
     // Prevent duplicate deployments within 60 seconds
     $transient_key = 'autodeploy_last_triggered';
@@ -10,18 +81,29 @@ function nsz_vercel_trigger_deployment() {
         return;
     }
 
-    if (($_SERVER['WP_ENV'] ?? '') !== 'development') {
-        $url = get_option('nsz_vercel_deployment_webhook_url');
-        $response = wp_remote_get($url);
+    if (($_SERVER['WP_ENV'] ?? '') === 'development') {
+        return;
+    }
 
-        if (is_wp_error($response)) {
-            $error_message = $response->get_error_message();
-            error_log("Failed to call URL: $url, Error: $error_message");
-        } else {
-            // Set transient to prevent duplicates for 60 seconds
-            set_transient($transient_key, true, 60);
-            error_log("Autodeploy triggered successfully");
-        }
+    $url = get_option('nsz_vercel_deployment_webhook_url');
+    if (empty($url)) {
+        return;
+    }
+
+    // Cancel any in-flight deployments so the latest edit supersedes them
+    // instead of queueing behind them (prevents a backlog when edits arrive
+    // faster than a build takes to complete).
+    nsz_vercel_cancel_active_deployments();
+
+    $response = wp_remote_get($url);
+
+    if (is_wp_error($response)) {
+        $error_message = $response->get_error_message();
+        error_log("Failed to call URL: $url, Error: $error_message");
+    } else {
+        // Set transient to prevent duplicates for 60 seconds
+        set_transient($transient_key, true, 60);
+        error_log("Autodeploy triggered successfully");
     }
 }
 
