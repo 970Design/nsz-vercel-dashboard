@@ -172,7 +172,7 @@ class Vercel_Dashboard {
 
         $html .= "</div>";
 
-        if ($deployment['state'] === 'BUILDING' || $deployment['state'] === 'QUEUED') {
+        if (in_array($deployment['state'], ['BUILDING', 'QUEUED', 'INITIALIZING'], true)) {
             $html .= '
             <button class="cancel-vercel-deploy button button-cancel" data-id="'.$deployment['uid'].'">Cancel Deployment</button>';
         }
@@ -233,7 +233,7 @@ class Vercel_Dashboard {
                         'formattedTime' => $this->get_time_ago($createdAt),
                         'buildingAt' => isset($deployment['buildingAt']) ? $deployment['buildingAt'] : null,
                         'buildTime' => $buildTime,
-                        'isActive' => in_array($deployment['state'], ['BUILDING', 'QUEUED'])
+                        'isActive' => in_array($deployment['state'], ['BUILDING', 'QUEUED', 'INITIALIZING'], true)
                     );
                 }
 

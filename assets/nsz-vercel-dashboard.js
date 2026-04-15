@@ -239,11 +239,15 @@ function checkPolling() {
     const deploymentsList = document.getElementById('nsz-design-vercel-deployments-list');
     if (!deploymentsList) return;
 
-    // Check if there are any building or queued deployments
-    const buildingDeployments = deploymentsList.querySelectorAll('.nsz-vercel-state-building, .nsz-vercel-state-queued');
+    // Check if there are any in-flight deployments (initializing, queued, or building).
+    // Missing `initializing` here caused polling to stop while a fresh deployment
+    // was still spinning up, so it never transitioned to building in the UI.
+    const activeDeployments = deploymentsList.querySelectorAll(
+        '.nsz-vercel-state-initializing, .nsz-vercel-state-queued, .nsz-vercel-state-building'
+    );
 
     // If no active deployments, stop polling
-    if (buildingDeployments.length === 0) {
+    if (activeDeployments.length === 0) {
         stopDeploymentPolling();
     }
 }
