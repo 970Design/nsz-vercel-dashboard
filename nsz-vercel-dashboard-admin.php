@@ -89,6 +89,7 @@ function nsz_vercel_dashboard_settings_page() {
 
     $nsz_vercel_api_field = 'nsz_vercel_api_key';
     $nsz_vercel_project_id_field = 'nsz_vercel_project_id';
+    $nsz_vercel_target_field = 'nsz_vercel_target';
     $nsz_vercel_git_repo = 'nsz_vercel_git_repo';
     $nsz_vercel_git_org = 'nsz_vercel_git_org';
     $nsz_vercel_git_branch = 'nsz_vercel_git_branch';
@@ -105,6 +106,9 @@ function nsz_vercel_dashboard_settings_page() {
 
         $nsz_vercel_project_id_value = sanitize_text_field($_POST[$nsz_vercel_project_id_field] ?? '');
         update_option($nsz_vercel_project_id_field, $nsz_vercel_project_id_value);
+
+        $nsz_vercel_target_value = sanitize_text_field($_POST[$nsz_vercel_target_field] ?? '');
+        update_option($nsz_vercel_target_field, $nsz_vercel_target_value);
 
         $nsz_vercel_git_repo_value = sanitize_text_field($_POST[$nsz_vercel_git_repo] ?? '');
         update_option($nsz_vercel_git_repo, $nsz_vercel_git_repo_value);
@@ -127,6 +131,7 @@ function nsz_vercel_dashboard_settings_page() {
 
     $nsz_vercel_api_value = nsz_decrypt_value(get_option($nsz_vercel_api_field, ''));
     $nsz_vercel_project_id_value = get_option($nsz_vercel_project_id_field, '');
+    $nsz_vercel_target_value = get_option($nsz_vercel_target_field, 'production');
     $nsz_vercel_enable_autodeploy_value = get_option($nsz_vercel_enable_autodeploy_field, false);
     $nsz_vercel_deployment_webhook_url_value = get_option($nsz_vercel_deployment_webhook_url_field, '');
     $wordmark_url = plugins_url( 'assets/wordmark.svg', __FILE__ );
@@ -158,6 +163,13 @@ function nsz_vercel_dashboard_settings_page() {
                         <div>
                             <label for="<?php echo esc_attr($nsz_vercel_project_id_field); ?>">Project ID: <span class="required">*</span></label>
                             <input required type="text" id="<?php echo esc_attr($nsz_vercel_project_id_field); ?>" name="<?php echo esc_attr($nsz_vercel_project_id_field); ?>" value="<?php echo esc_html($nsz_vercel_project_id_value); ?>" size="35">
+                            <br>
+                        </div>
+                    </div>
+                    <div class="nsz-design-video-row">
+                        <div>
+                            <label for="<?php echo esc_attr($nsz_vercel_target_field); ?>">Target:</label>
+                            <input type="text" id="<?php echo esc_attr($nsz_vercel_target_field); ?>" name="<?php echo esc_attr($nsz_vercel_target_field); ?>" value="<?php echo esc_html($nsz_vercel_target_value); ?>" placeholder="production" size="35">
                             <br>
                         </div>
                     </div>

@@ -300,7 +300,7 @@ function startVercelDeploy() {
             "org": nsz_vercel_dashboard_admin_js.git_org,
             "ref": nsz_vercel_dashboard_admin_js.git_branch
         },
-        "target": "production"
+        "target": nsz_vercel_dashboard_admin_js.target || "production"
     });
     xhr.send(data);
 }

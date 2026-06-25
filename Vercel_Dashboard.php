@@ -3,6 +3,7 @@
 class Vercel_Dashboard {
     public $vercelApiToken = null;
     public $projectId = null;
+    public $target = null;
     public $gitRepo = null;
     public $gitOrg = null;
     public $gitBranch = null;
@@ -10,6 +11,7 @@ class Vercel_Dashboard {
     public function __construct() {
         $this->vercelApiToken = nsz_decrypt_value(get_option('nsz_vercel_api_key'));
         $this->projectId = get_option('nsz_vercel_project_id');
+        $this->target = get_option('nsz_vercel_target', 'production');
         $this->gitRepo = get_option('nsz_vercel_git_repo');
         $this->gitOrg = get_option('nsz_vercel_git_org');
         $this->gitBranch = get_option('nsz_vercel_git_branch');
@@ -37,6 +39,7 @@ class Vercel_Dashboard {
         $params = array(
             'api_token' => $this->vercelApiToken,
             'project_id' => $this->projectId,
+            'target' => $this->target,
             'git_repo' => $this->gitRepo,
             'git_org' => $this->gitOrg,
             'git_branch' => $this->gitBranch,
