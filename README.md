@@ -24,6 +24,23 @@ The Vercel Dashboard plugin provides a convenient way to monitor and manage your
 2. Activate the plugin through the 'Plugins' screen in WordPress
 3. Use the Settings->Vercel Dashboard screen to configure the plugin
 
+## Stable Encryption Key (optional)
+
+Saved credentials are encrypted with AES-256. By default the encryption key is derived
+from the WordPress salts (`AUTH_SALT` / `SECURE_AUTH_SALT`), which differ per environment —
+so encrypted values cannot be decrypted after a database transfer between environments.
+
+To make encrypted values portable, define `NSZ_ENCRYPTION_SALT` with the *same* value in
+every environment (e.g. in Bedrock's `config/application.php`):
+
+```php
+Config::define('NSZ_ENCRYPTION_SALT', env('NSZ_ENCRYPTION_SALT') ?: '');
+```
+
+Opting in is non-destructive: values encrypted before the constant was set still decrypt
+via the WordPress-salt fallback. A value only becomes transfer-proof once it has been
+re-saved (re-encrypted under the shared salt) after the constant is in place.
+
 ## FAQ
 
 **Where can I find the settings?**
